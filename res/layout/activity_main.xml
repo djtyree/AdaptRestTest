@@ -121,5 +121,41 @@
             android:textSize="20sp" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/button_uploadJPs"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/layout_rounded"
+            android:drawableLeft="@drawable/upload_icon"
+            android:onClick="uploadJPsOnClick"
+            android:padding="10dp"
+            android:text="Upload JumpPoints"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/button_kdtree"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/layout_rounded"
+            android:drawableLeft="@drawable/goals_icon"
+            android:onClick="createTreeOnClick"
+            android:padding="10dp"
+            android:text="Create Tree"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,8 @@
 package com.darpa.adaptresttest;
 
+import java.util.List;
+
+import kdAlgorithm2.KDTree;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -12,13 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.darpa.rest.RestHelper;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends Activity {
 	private LocationManager lm; 
 	private Location location;
 	private TextView editLat, editLon;
 	private RestHelper rest;
-	private static final String RESTURL = "http://192.168.1.101:5000/rest/api/nodes";
+	private static final String RESTURL = "http://192.168.0.156:5000/rest/api";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +63,7 @@ public class MainActivity extends Activity {
 	
 	public void locUploadOnClick(View view) {
 		Toast.makeText(MainActivity.this, "Sending Location", Toast.LENGTH_SHORT).show();
-		
-		Double lat = Double.parseDouble(editLat.getText().toString());
-		Double lon = Double.parseDouble(editLon.getText().toString());
-		
-		Location loc = new Location("Current Location");
-		loc.setLatitude(lat);
-		loc.setLongitude(lon);
+		Location loc = getLocation();
 		
 		rest.pushLocation(loc);
 		
@@ -73,8 +71,21 @@ public class MainActivity extends Activity {
 	
 	public void goalsOnClick(View view) {
 		rest.pullGoals();
-		Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
+	}
+	
+	public void uploadJPsOnClick(View view) {
+		Location loc = getLocation();
+		List<LatLng> jps = rest.genJPs(5, loc.getLatitude(), loc.getLongitude());
+		rest.pushJumpPoints(jps);		
+		Toast.makeText(MainActivity.this, "JumpPoints Sent", Toast.LENGTH_SHORT).show();
+	}
+	
+	public void createTreeOnClick(View view) {
+		Location loc = getLocation();
+		KDTree<Integer> map = rest.genTree(500, loc.getLatitude(), loc.getLongitude());
+		rest.pushObstacles(map);		
+		Toast.makeText(MainActivity.this, "Map Generated", Toast.LENGTH_SHORT).show();
 	}
 	
 	private void showMyAddress(Location location) {
@@ -83,4 +94,25 @@ public class MainActivity extends Activity {
 	    editLat.setText(Double.toString(latitude));
 	    editLon.setText(Double.toString(longitude));	    
 	}
+	
+	private Location getLocation() {
+		Location loc;
+		String strLat = editLat.getText().toString();
+		String strLon = editLon.getText().toString();		
+		
+		if((strLat == null || strLat.isEmpty()) || (strLon == null || strLon.isEmpty())) {
+			loc= lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			showMyAddress(loc);
+		} else {
+			Double lat = Double.parseDouble(strLat);
+			Double lon = Double.parseDouble(strLon);
+			loc = new Location("Current Location");
+			loc.setLatitude(lat);
+			loc.setLongitude(lon);
+			loc.setSpeed((float) 5.2);
+			loc.setBearing((float) 120);
+		}		
+		return loc;		
+	}
+	
 }

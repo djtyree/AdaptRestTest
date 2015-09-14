@@ -44,7 +44,7 @@ public class RestGoals extends AsyncTask<String, String, JSONObject> {
 		JSONParser jParser = new JSONParser();
 
 		// Getting JSON from URL
-		JSONObject json = jParser.getJSONFromUrl(url + "/" + id + "/goals");
+		JSONObject json = jParser.getJSONFromUrl(url + "/nodes/" + id + "/goals");
 		//Log.d(rtag, "JSON returned. json=" + json);
 		try {
 			// Getting JSON Array
